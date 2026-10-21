@@ -474,7 +474,7 @@
     </div>
     <h1 class="hero-title">Serial<br>Cheaters</h1>
     <button class="btn-experiments" onclick="openDrawer()">
-      &#x2665; &nbsp; Subjects
+      Enter
     </button>
   </div>
 </section>
@@ -483,10 +483,24 @@
 <div id="exp-drawer" onclick="closeDrawerOutside(event)">
   <div class="drawer-panel">
     <div class="drawer-header">
-      <h2 id="drawer-title">Subjects</h2>
-      <button class="close-btn" onclick="closeDrawer()">✕</button>
+      <h2 id="drawer-title">Select Year</h2>
+      <button class="close-btn" onclick="handleDrawerCloseOrBack()">✕</button>
     </div>
-    <div id="subject-list-wrap">
+    <div id="year-list-wrap">
+      <div class="subject-grid" id="year-list">
+        <div class="subject-card" onclick="selectYear('S.E')">
+          <span class="s-icon">🎓</span>
+          <span class="s-name">S.E</span>
+          <span class="s-count">Second Year</span>
+        </div>
+        <div class="subject-card" onclick="selectYear('T.E')">
+          <span class="s-icon">💻</span>
+          <span class="s-name">T.E</span>
+          <span class="s-count">Third Year</span>
+        </div>
+      </div>
+    </div>
+    <div id="subject-list-wrap" style="display:none">
       <div class="subject-grid" id="subject-list"></div>
     </div>
     <ul class="exp-list" id="exp-list" style="display:none"></ul>
@@ -782,40 +796,117 @@ const subjects = [
 ];
 
 // ── STATE ──
+let currentYear = null;
 let currentSubjectIdx = null;
 
-// ── BUILD SUBJECT CARDS ──
-const subjectListEl = document.getElementById('subject-list');
-subjects.forEach((sub, i) => {
-  const card = document.createElement('div');
-  card.className = 'subject-card';
-  card.innerHTML = '<span class="s-icon">' + sub.icon + '</span><span class="s-name">' + sub.name + '</span><span class="s-count">' + sub.experiments.length + ' experiments</span>';
-  card.onclick = () => openSubject(i);
-  subjectListEl.appendChild(card);
-});
+const yearData = {
+  'S.E': subjects,
+  'T.E': [
+    {
+      id: 'se',
+      name: 'Software Engineering',
+      icon: '⚙️',
+      experiments: [
+        {
+          title: "Experiment 8 \u2014 Software Configuration Management (SCM)",
+          aim: "Perform Software Configuration Management (SCM) by managing different versions of the case study.",
+          theory: "Software Configuration Management (SCM) manages changes in software over time.\n\nPrimary reasons for implementing SCM:\n\u2022 Multiple developers work concurrently on continuously updating codebases.\n\u2022 Supports multiple versions, branches, authors, and distributed environments.\n\u2022 Accommodates changes in requirements, policies, budgets, and schedules.\n\u2022 Ensures software runs predictably across platforms and operating systems.\n\u2022 Controls costs and risk associated with software changes.",
+          sections: [
+            {
+              heading: "Dashboard Code (HTML)",
+              content: "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <style>\n        h1, h3 {\n            text-align: center;\n        }\n    </style>\n    <title>Dashboard</title>\n</head>\n<body>\n    <h1>Welcome to ResQnet</h1>\n    <h3>Disaster Relief Logistics & Emergency Response System</h3>\n</body>\n</html>"
+            },
+            {
+              heading: "Git Version Control Workflow",
+              content: "# Step 1: Initialize Git Repository\ngit init\n\n# Step 2: Add and Commit Initial Project (v1.0)\ngit add index.html\ngit commit -m \"Version 1.0: Initial dashboard created for ResQnet\"\n\n# Step 3: Link to Remote GitHub Repository\ngit branch -M main\ngit remote add origin https://github.com/your-username/ResQnet.git\ngit push -u origin main\n\n# Step 4: Create Versions 1.1, 1.2, 1.3...\ngit checkout -b v1.1\n# Edit files with updates\ngit commit -am \"Version 1.1: Added emergency relief camp tracking\"\ngit push origin v1.1\n\ngit checkout -b v1.2\n# Add further features\ngit commit -am \"Version 1.2: Added resource allocation module\"\ngit push origin v1.2\n\n# Step 5: Merge into main branch\ngit checkout main\ngit merge v1.1\ngit merge v1.2\ngit push origin main\n\n# Step 6: View Version History & Commit Graph\ngit log --oneline --graph --all"
+            }
+          ],
+          conclusion: "We have successfully learnt and practiced Software Configuration Management using version control systems like Git."
+        },
+        {
+          title: "Experiment 9 \u2014 White Box Test Cases",
+          aim: "To develop White Box Test Cases for the Hotel Management System by analyzing the internal logic, control flow, conditions, and independent paths of the program.",
+          theory: "White Box Testing analyzes internal logic, control structures, and execution paths of a program.\n\nCoverage Metrics:\n\u2022 Statement Coverage: Every executable statement in the code is executed at least once.\n\u2022 Branch Coverage: Evaluates all True and False branches of decision points.\n\u2022 Path Coverage: Exercises all distinct independent execution paths.\n\nCyclomatic Complexity: V(G) = D + 1, where D is the number of decision conditions. Here D = 3, so V(G) = 3 + 1 = 4. Hence, 4 independent paths are required.",
+          sections: [
+            {
+              heading: "Room Booking Eligibility (C Program)",
+              content: "#include <stdio.h>\n\nint checkBooking(int roomAvailable, int paymentDone, int validGuest)\n{\n    if (roomAvailable == 1)\n    {\n        if (paymentDone == 1)\n        {\n            if (validGuest == 1)\n                return 1;\n            else\n                return 0;\n        }\n        else\n            return 0;\n    }\n    else\n        return 0;\n}\n\nint main()\n{\n    int roomAvailable, paymentDone, validGuest;\n\n    printf(\"Enter Room Availability (1=Available, 0=Not Available): \");\n    scanf(\"%d\", &roomAvailable);\n\n    printf(\"Enter Payment Status (1=Paid, 0=Not Paid): \");\n    scanf(\"%d\", &paymentDone);\n\n    printf(\"Enter Guest Status (1=Valid, 0=Invalid): \");\n    scanf(\"%d\", &validGuest);\n\n    if (checkBooking(roomAvailable, paymentDone, validGuest))\n        printf(\"Room Booking Confirmed\\n\");\n    else\n        printf(\"Room Booking Rejected\\n\");\n\n    return 0;\n}"
+            },
+            {
+              heading: "Control Flow & Independent Paths",
+              content: "Decision Points:\n  D1: Is the room available?\n  D2: Is the payment completed?\n  D3: Is the guest valid?\n\nIndependent Paths:\n  Path | D1    | D2    | D3    | Result\n  -----+-------+-------+-------+------------------------\n  P1   | True  | True  | True  | Room Booking Confirmed\n  P2   | True  | True  | False | Room Booking Rejected\n  P3   | True  | False | \u2013     | Room Booking Rejected\n  P4   | False | \u2013     | \u2013     | Room Booking Rejected"
+            },
+            {
+              heading: "White Box Test Cases Table",
+              content: "TC ID | Room Avail | Payment Done | Valid Guest | Path | Expected Result\n------+------------+--------------+-------------+------+-----------------------\nWB01  | 1          | 1            | 1           | P1   | Room Booking Confirmed\nWB02  | 1          | 1            | 0           | P2   | Room Booking Rejected\nWB03  | 1          | 0            | 1           | P3   | Room Booking Rejected\nWB04  | 0          | 1            | 1           | P4   | Room Booking Rejected\nWB05  | 1          | 1            | 1           | P1   | Room Booking Confirmed\nWB06  | 1          | 0            | 0           | P3   | Room Booking Rejected"
+            },
+            {
+              heading: "Compile & Run",
+              content: "gcc hotel_booking.c -o hotel_booking\n./hotel_booking"
+            }
+          ],
+          conclusion: "The experiment demonstrates the use of White Box Testing to verify the internal logic and control flow of a Hotel Management System. By testing room availability, payment status, and guest validity, all four independent paths were successfully covered."
+        }
+      ]
+    }
+  ]
+};
 
 function openDrawer() {
-  showSubjects();
+  showYears();
   document.getElementById('exp-drawer').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
 
-function showSubjects() {
-  document.getElementById('drawer-title').innerHTML = 'Subjects';
+function showYears() {
+  currentYear = null;
+  currentSubjectIdx = null;
+  document.getElementById('drawer-title').innerHTML = 'Select Year';
+  document.getElementById('year-list-wrap').style.display = '';
+  document.getElementById('subject-list-wrap').style.display = 'none';
+  document.getElementById('exp-list').style.display = 'none';
+}
+
+function selectYear(yr) {
+  showSubjects(yr);
+}
+
+function showSubjects(yr) {
+  currentYear = yr;
+  currentSubjectIdx = null;
+  document.getElementById('drawer-title').textContent = yr;
+  document.getElementById('year-list-wrap').style.display = 'none';
   document.getElementById('subject-list-wrap').style.display = '';
   document.getElementById('exp-list').style.display = 'none';
-  currentSubjectIdx = null;
+
+  const listEl = document.getElementById('subject-list');
+  listEl.innerHTML = '';
+  const subs = yearData[yr] || [];
+  subs.forEach((sub, i) => {
+    const card = document.createElement('div');
+    card.className = 'subject-card';
+    card.innerHTML = '<span class="s-icon">' + sub.icon + '</span><span class="s-name">' + sub.name + '</span><span class="s-count">' + (sub.experiments && sub.experiments.length ? sub.experiments.length + ' experiments' : 'Coming soon') + '</span>';
+    card.onclick = () => openSubject(i);
+    listEl.appendChild(card);
+  });
 }
 
 function openSubject(idx) {
   currentSubjectIdx = idx;
-  const sub = subjects[idx];
-  document.getElementById('drawer-title').innerHTML =
-    '<button class="drawer-back" onclick="showSubjects()">\u2190</button> ' + sub.name;
+  const sub = yearData[currentYear][idx];
+  document.getElementById('drawer-title').textContent = sub.name;
+  document.getElementById('year-list-wrap').style.display = 'none';
   document.getElementById('subject-list-wrap').style.display = 'none';
   const list = document.getElementById('exp-list');
   list.style.display = '';
   list.innerHTML = '';
+  if (!sub.experiments || sub.experiments.length === 0) {
+    const li = document.createElement('li');
+    li.style.cssText = 'text-align:center; padding: 2.5rem 1rem; color: var(--muted); font-size: 0.85rem; letter-spacing: 0.1em;';
+    li.innerHTML = '⚡ Experiments coming soon...';
+    list.appendChild(li);
+    return;
+  }
   sub.experiments.forEach((exp, i) => {
     const li = document.createElement('li');
     const btn = document.createElement('button');
@@ -825,6 +916,18 @@ function openSubject(idx) {
     li.appendChild(btn);
     list.appendChild(li);
   });
+}
+
+function handleDrawerCloseOrBack() {
+  const expList = document.getElementById('exp-list');
+  const subjectListWrap = document.getElementById('subject-list-wrap');
+  if (expList.style.display !== 'none') {
+    showSubjects(currentYear);
+  } else if (subjectListWrap.style.display !== 'none') {
+    showYears();
+  } else {
+    closeDrawer();
+  }
 }
 
 function closeDrawer() {
@@ -838,7 +941,7 @@ function closeDrawerOutside(e) {
 
 function openExp(idx) {
   closeDrawer();
-  const exp = subjects[currentSubjectIdx].experiments[idx];
+  const exp = yearData[currentYear][currentSubjectIdx].experiments[idx];
   document.getElementById('exp-page-title').textContent = exp.title;
   let html = '';
   if (exp.aim)    html += '<h2>Aim</h2><p>' + exp.aim + '</p>';

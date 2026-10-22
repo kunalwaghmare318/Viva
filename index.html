@@ -301,6 +301,7 @@
     line-height: 1.8;
     color: #bbb;
     margin-bottom: 0.4rem;
+    white-space: pre-line;
   }
 
   .exp-body ul { padding-left: 1.2rem; margin-bottom: 0.8rem; }
@@ -803,6 +804,161 @@ const yearData = {
   'S.E': subjects,
   'T.E': [
     {
+      "id": "aisc",
+      "name": "Artificial Intelligence and soft computing",
+      "icon": "🧠",
+      "experiments": [
+            {
+                  "title": "Experiment 5 — Depth-First Search (DFS)",
+                  "aim": "Program on Uninformed Search Methods: Depth-First Search (DFS)",
+                  "theory": "Depth-First Search (DFS) is an uninformed graph traversal algorithm. It explores as deeply as possible along each branch before backtracking. It operates using a Last-In-First-Out (LIFO) stack (or recursion) and maintains a visited set to avoid infinite cycles in graphs.",
+                  "sections": [
+                        {
+                              "heading": "Python Program",
+                              "content": "graph = {\n    'A': ['B', 'C'],\n    'B': ['D', 'E'],\n    'C': ['F'],\n    'D': [],\n    'E': [],\n    'F': []\n}\n \nvisited = set()\n \ndef dfs(node):\n    if node not in visited:\n        print(node, end=\" \")\n        visited.add(node)\n        for neighbour in graph[node]:\n            dfs(neighbour)\n \ndfs('A')"
+                        },
+                        {
+                              "heading": "Output",
+                              "content": "A B D E C F"
+                        }
+                  ],
+                  "conclusion": "I was able to implement Depth-First Search (DFS) using recursion to traverse a graph by exploring each branch deeply before backtracking."
+            },
+            {
+                  "title": "Experiment 6 — Breadth-First Search (BFS)",
+                  "aim": "Program on Uninformed Search Methods: Breadth-First Search (BFS)",
+                  "theory": "Breadth-First Search (BFS) is an uninformed graph traversal algorithm that explores all neighbor vertices at the present depth prior to moving on to nodes at the next depth level. BFS uses a First-In-First-Out (FIFO) queue to ensure nodes are discovered level by level.",
+                  "sections": [
+                        {
+                              "heading": "Python Program",
+                              "content": "from collections import deque\n \ngraph = {\n    'A': ['B', 'C'],\n    'B': ['D', 'E'],\n    'C': ['F'],\n    'D': [],\n    'E': [],\n    'F': []\n}\n \ndef bfs(start):\n    visited = {start}\n    queue = deque([start])\n \n    while queue:\n        node = queue.popleft()\n        print(node, end=\" \")\n        for neighbour in graph[node]:\n            if neighbour not in visited:\n                visited.add(neighbour)\n                queue.append(neighbour)\n \nbfs('A')"
+                        },
+                        {
+                              "heading": "Output",
+                              "content": "A B C D E F"
+                        }
+                  ],
+                  "conclusion": "I was able to implement Breadth-First Search (BFS) to traverse a graph level by level using a queue."
+            },
+            {
+                  "title": "Experiment 7 — Alpha-Beta Pruning",
+                  "aim": "Implement Alpha-Beta Pruning to Find the Optimal Move in a Game Tree",
+                  "theory": "Alpha-Beta Pruning is an adversarial search optimization for the minimax algorithm in two-player zero-sum game trees. It prunes branches that cannot influence the final decision. Alpha represents the maximum score guaranteed for the maximizing player, and Beta represents the minimum score guaranteed for the minimizing player. A branch is cut off whenever Beta <= Alpha.",
+                  "sections": [
+                        {
+                              "heading": "Python Program",
+                              "content": "def alphabeta(values, depth, index, alpha, beta, maximizing):\n    if depth == 3:\n        return values[index]\n \n    if maximizing:\n        best = float('-inf')\n        for j in range(2):\n            score = alphabeta(values, depth + 1, index * 2 + j,\n                              alpha, beta, False)\n            best = max(best, score)\n            alpha = max(alpha, best)\n            if beta <= alpha:\n                break\n        return best\n    else:\n        best = float('inf')\n        for j in range(2):\n            score = alphabeta(values, depth + 1, index * 2 + j,\n                              alpha, beta, True)\n            best = min(best, score)\n            beta = min(beta, best)\n            if beta <= alpha:\n                break\n        return best\n \nvalues = [3, 5, 6, 9, 1, 2, 0, -1]\nprint(\"Optimal value:\", alphabeta(values, 0, 0, float('-inf'),\n                                  float('inf'), True))"
+                        },
+                        {
+                              "heading": "Output",
+                              "content": "Optimal value: 5"
+                        }
+                  ],
+                  "conclusion": "I was able to implement Alpha-Beta Pruning to find the optimal value in a game tree while skipping branches that cannot affect the final decision."
+            },
+            {
+                  "title": "Experiment 8 — Fuzzy Control System",
+                  "aim": "Simulate a Fuzzy Control System for a Real-World Application",
+                  "theory": "Fuzzy logic models approximate, human-like reasoning where truth values range continuously between 0 and 1 rather than strictly binary 0 or 1. A fuzzy control system comprises fuzzification (mapping crisp inputs into fuzzy degrees of membership), rule evaluation, and defuzzification (converting fuzzy outputs back into crisp control values, such as using weighted averages).\n\nNote: This is a simplified fuzzy controller using two membership values (cold and hot) and a weighted-average output.",
+                  "sections": [
+                        {
+                              "heading": "Note",
+                              "content": "Note: This is a simplified fuzzy controller using two membership values and a weighted-average output."
+                        },
+                        {
+                              "heading": "Python Program",
+                              "content": "def fan_control(temp):\n    cold = max(0, min(1, (30 - temp) / 10))\n    hot = max(0, min(1, (temp - 20) / 10))\n \n    if cold + hot == 0:\n        return 30 if temp < 20 else 100\n \n    speed = (cold * 30 + hot * 100) / (cold + hot)\n    return round(speed, 2)\n \ntemp = 28\nprint(\"Temperature:\", temp, \"C\")\nprint(\"Fan Speed:\", fan_control(temp), \"%\")"
+                        },
+                        {
+                              "heading": "Output",
+                              "content": "Temperature: 28 C\nFan Speed: 86.0 %"
+                        }
+                  ],
+                  "conclusion": "I was able to simulate a fuzzy control system using fuzzification and defuzzification to determine fan speed based on temperature."
+            },
+            {
+                  "title": "Experiment 9 — Associative Memory Network",
+                  "aim": "Implement an Associative Memory Network to Store and Retrieve Patterns",
+                  "theory": "An Associative Memory Network (such as an auto-associative Hopfield Network) stores patterns in a synaptic weight matrix calculated using outer-product Hebbian learning with diagonal elements set to zero. Given an incomplete, corrupted, or noisy input pattern, the network recalls the pristine stored pattern through matrix-vector multiplication and sign thresholding.",
+                  "sections": [
+                        {
+                              "heading": "Prerequisites",
+                              "content": "pip install numpy"
+                        },
+                        {
+                              "heading": "Python Program",
+                              "content": "import numpy as np\n \npattern = np.array([1, -1, 1, -1])\nweights = np.outer(pattern, pattern)\nnp.fill_diagonal(weights, 0)\n \nnoisy = np.array([1, -1, -1, -1])\noutput = np.sign(weights @ noisy)\noutput[output == 0] = 1\n \nprint(\"Stored Pattern:\", pattern)\nprint(\"Noisy Pattern:\", noisy)\nprint(\"Recalled Pattern:\", output)"
+                        },
+                        {
+                              "heading": "Output",
+                              "content": "Stored Pattern: [ 1 -1  1 -1]\nNoisy Pattern: [ 1 -1 -1 -1]\nRecalled Pattern: [ 1 -1  1 -1]"
+                        }
+                  ],
+                  "conclusion": "I was able to implement an associative memory network to store and retrieve a pattern from noisy input using a weight matrix."
+            },
+            {
+                  "title": "Experiment 10 — Single-Layer Perceptron",
+                  "aim": "Develop a Single-Layer Perceptron Using the Perceptron Learning Rule",
+                  "theory": "A Single-Layer Perceptron is a fundamental artificial neural network unit used for binary classification of linearly separable patterns. It computes the weighted sum of inputs plus bias, passed through a step activation function. The perceptron learning rule iteratively updates synaptic weights and bias whenever a prediction error occurs: w = w + eta * error * x.",
+                  "sections": [
+                        {
+                              "heading": "Prerequisites",
+                              "content": "pip install numpy"
+                        },
+                        {
+                              "heading": "Python Program",
+                              "content": "import numpy as np\n \nX = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])\ny = np.array([0, 0, 0, 1])\n \nweights = np.zeros(2)\nbias = 0\nlearning_rate = 0.1\n \nfor _ in range(10):\n    for i in range(len(X)):\n        pred = 1 if np.dot(X[i], weights) + bias > 0 else 0\n        error = y[i] - pred\n        weights += learning_rate * error * X[i]\n        bias += learning_rate * error\n \nprint(\"Predictions:\")\nfor x in X:\n    print(1 if np.dot(x, weights) + bias > 0 else 0)"
+                        },
+                        {
+                              "heading": "Output",
+                              "content": "Predictions:\n0\n0\n0\n1"
+                        }
+                  ],
+                  "conclusion": "I was able to implement a single-layer perceptron using the perceptron learning rule to learn the AND logic gate."
+            },
+            {
+                  "title": "Experiment 11 — Multilayer Perceptron (MLP)",
+                  "aim": "Implement a Multilayer Perceptron (MLP) Using Supervised Learning and Backpropagation",
+                  "theory": "A Multilayer Perceptron (MLP) is a feedforward artificial neural network with input, hidden, and output layers. MLPs overcome the linear separability limitations of single-layer perceptrons, learning non-linear functions (such as the XOR logic gate) through non-linear activation functions (e.g. tanh) and the backpropagation gradient descent learning algorithm.",
+                  "sections": [
+                        {
+                              "heading": "Prerequisites",
+                              "content": "pip install scikit-learn"
+                        },
+                        {
+                              "heading": "Python Program",
+                              "content": "from sklearn.neural_network import MLPClassifier\n \nX = [[0, 0], [0, 1], [1, 0], [1, 1]]\ny = [0, 1, 1, 0]\n \nmodel = MLPClassifier(hidden_layer_sizes=(4,), max_iter=10000,\n                      activation='tanh', solver='lbfgs', random_state=1)\nmodel.fit(X, y)\n \nprint(\"Input:\", X)\nprint(\"Output:\", model.predict(X))"
+                        },
+                        {
+                              "heading": "Output",
+                              "content": "Input: [[0, 0], [0, 1], [1, 0], [1, 1]]\nOutput: [0 1 1 0]"
+                        }
+                  ],
+                  "conclusion": "I was able to implement a Multilayer Perceptron using supervised learning and backpropagation to learn the XOR logic gate."
+            },
+            {
+                  "title": "Experiment 12 — Water Jug Problem (BFS)",
+                  "aim": "State Space Formulation for the Water Jug Problem Using BFS",
+                  "theory": "The Water Jug Problem is a classic state space search problem. Given a 4-litre jug and a 3-litre jug with no measuring markings, the goal is to obtain exactly 2 litres in the 4-litre jug. Starting from the initial state (0, 0), valid operations include filling, emptying, and transferring water between jugs. Breadth-First Search (BFS) explores the state space systematically to find the shortest sequence of steps to the goal state.",
+                  "sections": [
+                        {
+                              "heading": "State Space Formulation",
+                              "content": "State: (a, b), where a is the amount in the 4-litre jug and b is the amount in the 3-litre jug.\nInitial state: (0, 0)\nGoal state: any state (2, b)\nOperators: Fill, empty, or pour water between the jugs."
+                        },
+                        {
+                              "heading": "Python Program",
+                              "content": "from collections import deque\n \ndef water_jug():\n    start = (0, 0)\n    queue = deque([(start, [start])])\n    visited = {start}\n \n    while queue:\n        (a, b), path = queue.popleft()\n \n        if a == 2:\n            for state in path:\n                print(state)\n            print(\"Goal reached!\")\n            return\n \n        pour_ab = min(a, 3 - b)\n        pour_ba = min(b, 4 - a)\n        next_states = [\n            (4, b), (a, 3), (0, b), (a, 0),\n            (a - pour_ab, b + pour_ab),\n            (a + pour_ba, b - pour_ba)\n        ]\n \n        for state in next_states:\n            if state not in visited:\n                visited.add(state)\n                queue.append((state, path + [state]))\n \nwater_jug()"
+                        },
+                        {
+                              "heading": "Output",
+                              "content": "(0, 0)\n(0, 3)\n(3, 0)\n(3, 3)\n(4, 2)\n(0, 2)\n(2, 0)\nGoal reached!"
+                        }
+                  ],
+                  "conclusion": "I was able to solve the Water Jug Problem using Breadth-First Search by exploring states until the 4-litre jug contained exactly 2 litres."
+            }
+      ]
+},
+    {
       id: 'se',
       name: 'Software Engineering',
       icon: '⚙️',
@@ -910,8 +1066,9 @@ function openSubject(idx) {
   sub.experiments.forEach((exp, i) => {
     const li = document.createElement('li');
     const btn = document.createElement('button');
-    const num = String(i + 1).padStart(2, '0');
-    btn.innerHTML = '<span class="exp-num">' + num + '</span>' + exp.title.replace(/Experiment \d+ \u2014 /, '');
+    const match = exp.title.match(/Experiment\s+(\d+)/i);
+    const num = match ? match[1].padStart(2, '0') : String(i + 1).padStart(2, '0');
+    btn.innerHTML = '<span class="exp-num">' + num + '</span>' + exp.title.replace(/Experiment\s+\d+\s*[\u2014\-]\s*/, '');
     btn.onclick = () => openExp(i);
     li.appendChild(btn);
     list.appendChild(li);

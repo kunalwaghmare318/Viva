@@ -809,6 +809,86 @@ const yearData = {
       "icon": "🧠",
       "experiments": [
             {
+                  "title": "Experiment 1 — Case Study on AI Agent in a Chess Game",
+                  "aim": "Case Study on AI Agent in a Chess Game: Types, Environment, and PEAS Framework",
+                  "theory": "Chess is a two-player strategy board game widely used in AI to study intelligent decision-making. A chess-playing AI agent analyzes the current board position, predicts future moves, and selects the optimal move to maximize winning chances. Goal-Based Agents plan moves to checkmate the king, while advanced engines (Stockfish, AlphaZero) act as Utility-Based Agents evaluating board positions.",
+                  "sections": [
+                        {
+                              "heading": "Working of Chess AI Agent",
+                              "content": "1. Observe the current chessboard.\n2. Generate all legal moves.\n3. Predict possible future moves (Minimax / Alpha-Beta).\n4. Evaluate each board position.\n5. Select the best move.\n6. Execute the move on the board.\n7. Repeat until the game ends."
+                        },
+                        {
+                              "heading": "Environment Analysis",
+                              "content": "Property          | Description\n------------------+-------------------------------------------------\nFully Observable  | Both players can see the entire chessboard.\nDeterministic     | Every move has a predictable outcome (no randomness).\nStatic            | The board does not change while a player thinks.\nDiscrete          | Finite number of legal moves and board states.\nSequential        | Each move affects all future moves.\nMulti-Agent       | Two intelligent players compete against each other.\nKnown Environment | Rules of chess are completely known to both."
+                        },
+                        {
+                              "heading": "PEAS Framework",
+                              "content": "PEAS Component      | Description\n--------------------+-------------------------------------------------\nPerformance Measure | Win game, checkmate opponent, avoid losing pieces, maximize board advantage.\nEnvironment         | Chessboard, 32 chess pieces, opponent player, chess rules, game clock.\nActuators           | Move pieces legally, capture pieces, castle, promote pawns, resign.\nSensors             | Current board position, piece locations, opponent moves, game status (check/mate/stalemate)."
+                        },
+                        {
+                              "heading": "AI Algorithms Used in Chess",
+                              "content": "• Minimax Algorithm: Evaluates possible future moves assuming optimal opponent play.\n• Alpha-Beta Pruning: Prunes branches that cannot influence the final decision.\n• Heuristic Evaluation Function: Scores board positions on material, king safety, mobility.\n• Machine Learning / Deep Learning: Neural networks (AlphaZero) learning via self-play."
+                        }
+                  ],
+                  "conclusion": "A chess-playing AI is an intelligent agent that observes the board, evaluates possible moves, and selects the best action to achieve the goal of winning. It is primarily a Goal-Based Agent, while advanced systems like Stockfish and AlphaZero also use Utility-Based decision-making. The PEAS framework effectively describes how the agent perceives its environment, makes decisions, and performs actions in a structured game like chess."
+            },
+            {
+                  "title": "Experiment 2 — Uninformed Search (BFS & DFS) for Water Jug",
+                  "aim": "To implement Breadth First Search (BFS) and Depth First Search (DFS) algorithms for solving the Water Jug Problem.",
+                  "theory": "The Water Jug Problem involves measuring an exact target volume using two jugs of capacities A (4L) and B (3L) without markings. Uninformed search techniques explore the state space without domain heuristics. BFS uses a FIFO queue to systematically explore states level by level and guarantees the shortest solution path. DFS explores as deep as possible along each branch using recursion or a LIFO stack.",
+                  "sections": [
+                        {
+                              "heading": "BFS Implementation (C)",
+                              "content": "#include <stdio.h>\n\ntypedef struct {\n    int x, y;\n} State;\n\nState queue[100];\nint front = 0, rear = 0;\nint visited[5][4];\n\nvoid enqueue(State s) {\n    queue[rear++] = s;\n}\n\nState dequeue() {\n    return queue[front++];\n}\n\nint isEmpty() {\n    return front == rear;\n}\n\nvoid BFS(int cap1, int cap2, int target) {\n    State start = {0, 0};\n    enqueue(start);\n    visited[0][0] = 1;\n\n    while (!isEmpty()) {\n        State curr = dequeue();\n        printf(\"(%d,%d)\\n\", curr.x, curr.y);\n\n        if (curr.x == target || curr.y == target) {\n            printf(\"\\nGoal Reached\\n\");\n            return;\n        }\n\n        State next[6];\n        next[0] = (State){cap1, curr.y};\n        next[1] = (State){curr.x, cap2};\n        next[2] = (State){0, curr.y};\n        next[3] = (State){curr.x, 0};\n\n        int transfer = (curr.x < cap2 - curr.y) ? curr.x : cap2 - curr.y;\n        next[4] = (State){curr.x - transfer, curr.y + transfer};\n\n        transfer = (curr.y < cap1 - curr.x) ? curr.y : cap1 - curr.x;\n        next[5] = (State){curr.x + transfer, curr.y - transfer};\n\n        for (int i = 0; i < 6; i++) {\n            int x = next[i].x;\n            int y = next[i].y;\n            if (!visited[x][y]) {\n                visited[x][y] = 1;\n                enqueue(next[i]);\n            }\n        }\n    }\n}\n\nint main() {\n    BFS(4, 3, 2);\n    return 0;\n}"
+                        },
+                        {
+                              "heading": "BFS Output",
+                              "content": "(0,0)\n(4,0)\n(0,3)\n(4,3)\n(1,3)\n(3,0)\n(1,0)\n(3,3)\n(0,1)\n(4,2)\n\nGoal Reached"
+                        },
+                        {
+                              "heading": "DFS Implementation (C)",
+                              "content": "#include <stdio.h>\n\nint visited[5][4];\n\nvoid DFS(int x, int y, int cap1, int cap2, int target) {\n    if (x < 0 || y < 0 || x > cap1 || y > cap2)\n        return;\n    if (visited[x][y])\n        return;\n\n    visited[x][y] = 1;\n    printf(\"(%d,%d)\\n\", x, y);\n\n    if (x == target || y == target) {\n        printf(\"\\nGoal Reached\\n\");\n        return;\n    }\n\n    DFS(cap1, y, cap1, cap2, target);\n    DFS(x, cap2, cap1, cap2, target);\n    DFS(0, y, cap1, cap2, target);\n    DFS(x, 0, cap1, cap2, target);\n\n    int transfer = (x < cap2 - y) ? x : cap2 - y;\n    DFS(x - transfer, y + transfer, cap1, cap2, target);\n\n    transfer = (y < cap1 - x) ? y : cap1 - x;\n    DFS(x + transfer, y - transfer, cap1, cap2, target);\n}\n\nint main() {\n    DFS(0, 0, 4, 3, 2);\n    return 0;\n}"
+                        },
+                        {
+                              "heading": "DFS Output",
+                              "content": "(0,0)\n(4,0)\n(4,3)\n(0,3)\n(3,0)\n(3,3)\n(4,2)\n\nGoal Reached"
+                        }
+                  ],
+                  "conclusion": "The Water Jug Problem was successfully solved using Breadth First Search (BFS) and Depth First Search (DFS). Both algorithms reached the goal state containing 2 litres of water and demonstrated the working of uninformed search techniques."
+            },
+            {
+                  "title": "Experiment 3 — A* Search Algorithm for 8-Puzzle Problem",
+                  "aim": "To implement the A* Search Algorithm for solving the 8-Puzzle Problem and find the optimal path from the initial state to the goal state using heuristic search.",
+                  "theory": "The 8-Puzzle problem consists of a 3x3 grid with eight numbered tiles and one blank space (0). The objective is to reach the goal configuration from an initial state. A* search is an informed heuristic search using the evaluation function f(n) = g(n) + h(n), where g(n) is the path cost from the root to node n, and h(n) is the heuristic estimate of the cost to reach the goal (e.g. number of misplaced tiles). The node with the lowest f(n) value is selected for expansion.",
+                  "sections": [
+                        {
+                              "heading": "A* 8-Puzzle Program (C)",
+                              "content": "#include <stdio.h>\n#include <stdlib.h>\n\nint goal[3][3] = {\n    {1, 2, 3},\n    {4, 5, 6},\n    {7, 8, 0}\n};\n\nint heuristic(int state[3][3]) {\n    int count = 0;\n    for (int i = 0; i < 3; i++) {\n        for (int j = 0; j < 3; j++) {\n            if (state[i][j] != 0 && state[i][j] != goal[i][j]) {\n                count++;\n            }\n        }\n    }\n    return count;\n}\n\nvoid printState(int state[3][3]) {\n    for (int i = 0; i < 3; i++) {\n        for (int j = 0; j < 3; j++) {\n            printf(\"%d \", state[i][j]);\n        }\n        printf(\"\\n\");\n    }\n    printf(\"\\n\");\n}\n\nint main() {\n    int state[3][3] = {\n        {1, 2, 3},\n        {4, 0, 6},\n        {7, 5, 8}\n    };\n\n    printf(\"Initial State:\\n\");\n    printState(state);\n    int h = heuristic(state);\n    printf(\"Heuristic Value = %d\\n\\n\", h);\n\n    // Move 1: Swap 0 with 5\n    state[1][1] = 5;\n    state[2][1] = 0;\n    printf(\"After Move 1:\\n\");\n    printState(state);\n    h = heuristic(state);\n    printf(\"Heuristic Value = %d\\n\\n\", h);\n\n    // Move 2: Swap 0 with 8\n    state[2][1] = 8;\n    state[2][2] = 0;\n    printf(\"Goal State Reached:\\n\");\n    printState(state);\n    h = heuristic(state);\n    printf(\"Heuristic Value = %d\\n\", h);\n\n    return 0;\n}"
+                        },
+                        {
+                              "heading": "Output",
+                              "content": "Initial State:\n1 2 3 \n4 0 6 \n7 5 8 \n\nHeuristic Value = 2\n\nAfter Move 1:\n1 2 3 \n4 5 6 \n7 0 8 \n\nHeuristic Value = 1\n\nGoal State Reached:\n1 2 3 \n4 5 6 \n7 8 0 \n\nHeuristic Value = 0"
+                        }
+                  ],
+                  "conclusion": "The 8-Puzzle Problem was successfully solved using the A* Search Algorithm. The misplaced tile heuristic was used to estimate the distance from the goal state. The algorithm efficiently reached the goal state, demonstrating the effectiveness of informed search techniques."
+            },
+            {
+                  "title": "Experiment 4 — Alpha-Beta Pruning Algorithm",
+                  "aim": "To implement the Alpha-Beta Pruning algorithm for efficient decision-making in game-playing problems and to understand how unnecessary branches of a game tree can be eliminated without affecting the final decision.",
+                  "theory": "Game playing is a classic application of AI where an intelligent agent chooses optimal moves in adversarial two-player zero-sum games using a game tree. The Minimax algorithm evaluates all leaf nodes with complexity O(b^d). Alpha-Beta Pruning optimizes Minimax by maintaining two values: Alpha (best maximum value for MAX) and Beta (best minimum value for MIN). If alpha >= beta at any node, child branches are pruned because they cannot alter the root decision.",
+                  "sections": [
+                        {
+                              "heading": "Python Program",
+                              "content": "import math\n\ndef alpha_beta(node, depth, alpha, beta, maximizing_player):\n    # Terminal node\n    if depth == 0 or not isinstance(node, list):\n        return node\n\n    if maximizing_player:\n        value = -math.inf\n        for child in node:\n            value = max(value, alpha_beta(child, depth - 1, alpha, beta, False))\n            alpha = max(alpha, value)\n            # Beta cutoff\n            if alpha >= beta:\n                print(\"Beta cutoff - branch pruned\")\n                break\n        return value\n    else:\n        value = math.inf\n        for child in node:\n            value = min(value, alpha_beta(child, depth - 1, alpha, beta, True))\n            beta = min(beta, value)\n            # Alpha cutoff\n            if alpha >= beta:\n                print(\"Alpha cutoff - branch pruned\")\n                break\n        return value\n\n# Game tree: root has 2 children, each has 2 terminal values\ngame_tree = [\n    [3, 5],\n    [2, 9]\n]\n\n# Initial values\nalpha = -math.inf\nbeta = math.inf\n\nresult = alpha_beta(game_tree, 2, alpha, beta, True)\nprint(\"Optimal value:\", result)"
+                        },
+                        {
+                              "heading": "Output",
+                              "content": "Alpha cutoff - branch pruned\nOptimal value: 3"
+                        }
+                  ],
+                  "conclusion": "The Alpha-Beta Pruning algorithm was successfully implemented for game tree decision-making. By maintaining alpha and beta thresholds, the algorithm effectively pruned branches that could not influence the final decision, demonstrating optimal minimax decision-making with reduced search space."
+            },
+            {
                   "title": "Experiment 5 — Depth-First Search (DFS)",
                   "aim": "Program on Uninformed Search Methods: Depth-First Search (DFS)",
                   "theory": "Depth-First Search (DFS) is an uninformed graph traversal algorithm. It explores as deeply as possible along each branch before backtracking. It operates using a Last-In-First-Out (LIFO) stack (or recursion) and maintains a visited set to avoid infinite cycles in graphs.",
